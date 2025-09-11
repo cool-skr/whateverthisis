@@ -10,19 +10,27 @@ from app.models import models
 from app.crud import booking as booking_crud
 from app.api.dependencies import get_current_user
 
+# Import the new celery task
+from app.workers.tasks import process_booking_task
+
+
 router = APIRouter(tags=["Bookings"])
 
-@router.post("/bookings", response_model=schemas.Booking, status_code=status.HTTP_201_CREATED)
-async def create_a_booking(
+# REPLACE the existing booking creation endpoint with this:
+@router.post("/bookings", status_code=status.HTTP_202_ACCEPTED)
+async def request_booking(
     booking: schemas.BookingCreate,
-    db: AsyncSession = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
     """
-    Create a new booking for the currently authenticated user.
+    Accept a booking request and add it to the processing queue.
+    Responds immediately and processes the booking in the background.
     """
-
-    return await booking_crud.create_booking(db=db, booking=booking, user_id=current_user.id)
+    process_booking_task.delay(
+        booking_data=booking.model_dump(), user_id=current_user.id
+    )
+    
+    return {"message": "Your booking request has been received and is being processed."}
 
 @router.get("/users/me/bookings", response_model=List[schemas.Booking])
 async def read_user_bookings(
