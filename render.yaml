@@ -1,0 +1,17 @@
+services:
+  - name: evently-api
+    type: web
+    env: python
+    plan: free
+    envVarGroup: evently-secrets
+    buildCommand: "pip install -r requirements.txt && alembic upgrade head"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+
+  - name: evently-worker
+    type: worker
+    env: python
+    plan: free
+    envVarGroup: evently-secrets
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "celery -A app.workers.celery_app.celery_app worker --loglevel=info"
+    autoDeploy: true
