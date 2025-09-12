@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional, List
-from app.models.models import UserRole, BookingStatus, EventStatus
+from app.models.models import UserRole, BookingStatus, EventStatus, WaitlistStatus
 
 # --- User Schemas ---
 class UserBase(BaseModel):
@@ -67,7 +67,29 @@ class PopularEvent(BaseModel):
         from_attributes = True
 
 
+class DailyBookingStat(BaseModel):
+    date: str
+    booking_count: int
+
 class AnalyticsOverview(BaseModel):
     total_confirmed_bookings: int
     capacity_utilization_percentage: float
     most_popular_events: List[PopularEvent]
+    cancellation_rate_percentage: float
+    daily_booking_stats: List[DailyBookingStat]
+
+class WaitlistEntryBase(BaseModel):
+    event_id: int
+    tickets_requested: int
+
+class WaitlistEntryCreate(WaitlistEntryBase):
+    pass
+
+class WaitlistEntry(WaitlistEntryBase):
+    id: int
+    user_id: int
+    status: WaitlistStatus
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
