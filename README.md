@@ -1,4 +1,4 @@
-# Evently API
+# Backend Challenge API
 
 Backend system for the Evently platform.
 
@@ -40,14 +40,19 @@ Backend system for the Evently platform.
     ```
     # Main database connection URL for the application
     DATABASE_URL=postgresql+asyncpg://user:password@host:port/database
+    
     # Database connection URL specifically for Alembic migrations
     DATABASE_MIGRATION_URL=postgresql+psycopg2://user:password@host:port/database
+    
     # Secret key for JWT token encoding and other security purposes
     SECRET_KEY=your-super-secret-key
+    
     # URL for the Redis server, used for caching and background tasks
     REDIS_URL=redis://localhost:6379/0
+    
     # API key for Brevo (formerly Sendinblue) email service
     BREVO_API_KEY=your-brevo-api-key
+    
     # Email address used as the sender for outgoing emails
     SENDER_EMAIL=your-email@example.com
     ```
@@ -106,6 +111,14 @@ The API documentation is available at `http://localhost:8000/docs` when the appl
 ### Admin
 
 - `GET /admin/analytics`: Get analytics overview.
+
+## High Level Architecture
+<img width="880" height="449" alt="diagram-export-12-9-2025-11_24_10-pm" src="https://github.com/user-attachments/assets/da00f5bf-788f-46fa-a381-3e1aef04e430" />
+
+## ER Diagram
+<img width="1151" height="651" alt="evently" src="https://github.com/user-attachments/assets/23a3a2df-ef7b-49b9-a4ed-7d7095d4ae1a" />
+
+<img width="3840" height="3613" alt="Untitled diagram _ Mermaid Chart-2025-09-12-173843" src="https://github.com/user-attachments/assets/62d796ba-7319-4564-a105-51ffca3caecc" />
 
 ## Deployment
 
