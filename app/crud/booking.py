@@ -41,9 +41,15 @@ async def create_booking(
     event.booked_seats += booking.tickets_booked
     
     await db.commit()
-    await db.refresh(db_booking)
     
-    return db_booking
+    result = await db.execute(
+        select(models.Booking)
+        .options(selectinload(models.Booking.event)) 
+        .filter(models.Booking.id == db_booking.id)
+    )
+    
+    final_booking = result.scalars().first()
+    return final_booking 
 
 async def get_bookings_by_user(db: AsyncSession, user_id: int) -> List[models.Booking]:
     """
