@@ -105,10 +105,12 @@ async def cancel_booking(db: AsyncSession, booking: models.Booking) -> models.Bo
     event.booked_seats -= booking.tickets_booked
     booking.status = models.BookingStatus.CANCELLED
 
-    
+    event_id_for_waitlist = booking.event_id
     await db.commit()
     
-    
+    async with db.begin_nested():
+        await waitlist_crud.process_waitlist_for_event(db=db, event_id=event_id_for_waitlist)
+
     await db.refresh(booking)
     await db.refresh(event)  
 
