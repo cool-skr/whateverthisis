@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Response
 from sqlalchemy.ext.asyncio import AsyncSession
-from typing import List
+from typing import List, Union
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
@@ -10,17 +10,17 @@ from app.models import models
 from app.crud import booking as booking_crud
 from app.api.dependencies import get_current_user
 
-# Import the new celery task
 from app.workers.tasks import process_booking_task
 
 
 router = APIRouter(tags=["Bookings"])
 
-# REPLACE the existing booking creation endpoint with this:
+
 @router.post("/bookings", status_code=status.HTTP_202_ACCEPTED)
 async def request_booking(
     booking: schemas.BookingCreate,
     current_user: models.User = Depends(get_current_user),
+    response: Response = Response() 
 ):
     """
     Accept a booking request and add it to the processing queue.

@@ -28,6 +28,10 @@ class EventStatus(str, enum.Enum):
     CANCELLED = "CANCELLED"
 
 
+class WaitlistStatus(str, enum.Enum):
+    PENDING = "PENDING"
+    FULFILLED = "FULFILLED"
+
 
 class User(Base):
     __tablename__ = "users"
@@ -41,6 +45,7 @@ class User(Base):
 
     bookings = relationship("Booking", back_populates="user")
     events_created = relationship("Event", back_populates="creator")
+    waitlist_entries = relationship("WaitlistEntry", back_populates="user")
 
 
 class Event(Base):
@@ -59,6 +64,7 @@ class Event(Base):
 
     creator = relationship("User", back_populates="events_created")
     bookings = relationship("Booking", back_populates="event")
+    waitlist_entries = relationship("WaitlistEntry", back_populates="event")
 
 
 class Booking(Base):
@@ -73,3 +79,17 @@ class Booking(Base):
 
     user = relationship("User", back_populates="bookings")
     event = relationship("Event", back_populates="bookings")
+
+
+class WaitlistEntry(Base):
+    __tablename__ = "waitlist_entries"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    event_id = Column(Integer, ForeignKey("events.id"), nullable=False)
+    tickets_requested = Column(Integer, nullable=False)
+    status = Column(Enum(WaitlistStatus), default=WaitlistStatus.PENDING, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="waitlist_entries")
+    event = relationship("Event", back_populates="waitlist_entries")
