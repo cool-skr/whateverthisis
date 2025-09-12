@@ -10,29 +10,27 @@ from app.models import models
 from app.crud import booking as booking_crud
 from app.api.dependencies import get_current_user
 
+from app.workers.tasks import process_booking_task
+
+
 router = APIRouter(tags=["Bookings"])
 
-@router.post("/bookings", response_model=Union[schemas.Booking, schemas.WaitlistEntry])
-async def create_booking_or_waitlist(
+
+@router.post("/bookings", status_code=status.HTTP_202_ACCEPTED)
+async def request_booking(
     booking: schemas.BookingCreate,
-    db: AsyncSession = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
-    response: Response = Response() # Inject the Response object to set status code
+    response: Response = Response() 
 ):
     """
-    Creates a new booking or adds the user to the waitlist if the event is full.
-    - Returns a Booking object with status 201 if successful.
-    - Returns a WaitlistEntry object with status 202 if added to the waitlist.
+    Accept a booking request and add it to the processing queue.
+    Responds immediately and processes the booking in the background.
     """
-    result = await booking_crud.create_booking(db=db, booking=booking, user_id=current_user.id)
+    process_booking_task.delay(
+        booking_data=booking.model_dump(), user_id=current_user.id
+    )
     
-    # Set the status code based on the type of the result
-    if isinstance(result, models.Booking):
-        response.status_code = status.HTTP_201_CREATED
-    else: # It's a WaitlistEntry
-        response.status_code = status.HTTP_202_ACCEPTED
-    
-    return result
+    return {"message": "Your booking request has been received and is being processed."}
 
 @router.get("/users/me/bookings", response_model=List[schemas.Booking])
 async def read_user_bookings(
