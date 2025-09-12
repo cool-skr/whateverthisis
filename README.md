@@ -1,6 +1,6 @@
-# Backend Challenge API
+# Backend Challenge 
 
-Backend system for the Evently platform.
+Backend system for the ticket booking service platform. [name not included for plagiarism concerns]
 
 ## Features
 
@@ -23,8 +23,8 @@ Backend system for the Evently platform.
 
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/your-username/evently.git
-    cd evently
+    git clone https://github.com/cool-skr/whateverthisis.git
+    cd whateverthisis
     ```
 2.  Create a virtual environment and activate it:
     ```bash
