@@ -115,9 +115,7 @@ The API documentation is available at `http://localhost:8000/docs` when the appl
 ## High Level Architecture
 <img width="880" height="449" alt="diagram-export-12-9-2025-11_24_10-pm" src="https://github.com/user-attachments/assets/da00f5bf-788f-46fa-a381-3e1aef04e430" />
 
-## ER Diagram
-<img width="1151" height="651" alt="evently" src="https://github.com/user-attachments/assets/23a3a2df-ef7b-49b9-a4ed-7d7095d4ae1a" />
-
+## Schema Diagram
 <img width="3840" height="3613" alt="Untitled diagram _ Mermaid Chart-2025-09-12-173843" src="https://github.com/user-attachments/assets/62d796ba-7319-4564-a105-51ffca3caecc" />
 
 ## Deployment
