@@ -38,13 +38,18 @@ Backend system for the Evently platform.
 4.  Set up the environment variables:
     Create a `.env` file in the root directory and add the following variables:
     ```
+    # Main database connection URL for the application
     DATABASE_URL=postgresql+asyncpg://user:password@host:port/database
-    SECRET_KEY=your-secret-key
-    ALGORITHM=HS256
-    ACCESS_TOKEN_EXPIRE_MINUTES=30
-    BREVO_API_KEY=your-brevo-api-key
-    SENDER_EMAIL=your-sender-email
+    # Database connection URL specifically for Alembic migrations
+    DATABASE_MIGRATION_URL=postgresql+psycopg2://user:password@host:port/database
+    # Secret key for JWT token encoding and other security purposes
+    SECRET_KEY=your-super-secret-key
+    # URL for the Redis server, used for caching and background tasks
     REDIS_URL=redis://localhost:6379/0
+    # API key for Brevo (formerly Sendinblue) email service
+    BREVO_API_KEY=your-brevo-api-key
+    # Email address used as the sender for outgoing emails
+    SENDER_EMAIL=your-email@example.com
     ```
 
 ## Database Migrations
