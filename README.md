@@ -1,7 +1,7 @@
 # Backend Challenge 
-Note : [Name not included for plagiarism concerns]
 
 Backend system for the ticket booking service platform. 
+
 ## Features
 
 - User authentication and authorization
